@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to Shopy store where you can buy amazing products...
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{category.name}} - Shopy online store
+    {% else %}
+        See our new collections - Shopy Store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class = "mx-auto">
+        <p style="letter-spacing :.2em;font-size:14px;text-transform:uppercase;font-style:verdana;text-center;"><a href="{% url 'ecommerceapp:allProdCat' %}">Our Product Collections</a></p>
+    </div>
+        </div>
+</div>
+{% endif %}
+
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" style="width:1250px;height:500px;">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title" style="letter-spacing :.2em;font-size:14px;text-transform:uppercase;font-style:verdana;">{{category.name}} </h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+{% else %}
+<div>
+    <img class="my_image my_image_padding" src="{% static 'img/banner.jpg' %}" alt="our products" width="1250px;">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title" style="font-family:cambria;padding:15px;">Our Products Collections</h1>
+    <p class="text-justify" style="padding:15px;">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose</p>
+</div>
+{% endif %}
+
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <div>
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}} width=1250px height=50px"></a>
+                    <div class="card-body">
+                        <h4 style="font-family:cambria;text-tranform:uppercase;letter-spacing:.2em;padding-tp:15px;padding-bottom:10px;">{{product.name}}</h4>
+                        <p style="font-family:cambria;text-tranform:uppercase;letter-spacing:.2em;padding-tp:15px;padding-bottom:10px;">{{product.price}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm{% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+
+
+{% endblock %}
